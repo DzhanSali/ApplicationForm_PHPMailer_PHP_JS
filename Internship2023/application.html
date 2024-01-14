@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Application</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <meta charset="UTF-8">
+    <html lang="bg">
+</head>
+
+<body>
+    <div class="form_holder">
+        <form action="emailHandling.php" method="POST" enctype="multipart/form-data">
+            <div class="el_holder">
+
+                <div class="img_div">
+                    <div class="pictureHolder">
+                        <label for="preview"></label>
+                        <img id="preview" name="preview">
+                    </div>
+                    <div class="pictureUpload">
+                        <label for="picID" class="btn_pic">Качване на снимка</label>
+                        <!-- MAX_FILE_SIZE must precede the file input field (source: PHP docs)-->
+                        <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
+                        <input type="file" hidden style="display:none;" accept="image/*" name="picID" id="picID" onchange="previewImage(event)">
+
+                    </div>
+                </div>
+
+                <div class="main_sect">
+                    <div class="sect1" style="margin-top: 15px;">
+                        <div>
+                            <label for="name"></label>
+                            <input class="inputs" name="name" type="text" placeholder="Име" required>
+                        </div>
+
+                        <div>
+                            <label for="surname"></label>
+                            <input class="inputs" name="surname" type="text" placeholder="Фамилия" required>
+                        </div>
+                    </div>
+
+                    <div class="sect2">
+                        <div>
+                            <label for="phone_number"></label>
+                            <input class="inputs" name="phone_number" type="text" placeholder="Телефонен номер" required>
+                        </div>
+
+                        <div>
+                            <label for="email"></label>
+                            <input class="inputs" name="email" type="email" placeholder="Имейл адрес" required>
+                        </div>
+                    </div>
+
+                    <div class="sect4">
+                        <div>
+                            <label for="fb_link"></label>
+                            <input class="inputs" name="fb_link" type="text"
+                                placeholder="Линк към вашия Facebook профил" required>
+                        </div>
+
+                        <div>
+                            <label for="dateOfBirth"></label>
+                            <input class="inputs" name="dateOfBirth" type="date" placeholder="ДД/ММ/ГГГГ" required />
+                        </div>
+                    </div>
+
+                    <div class="sect3">
+
+                        <div>
+                            <label for="gender"></label>
+                            <input type="radio" name="gender" value="Мъж" required> Мъж
+                            <input type="radio" name="gender" value="Жена"> Жена
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="uploadCV" style="margin-left: 4px; margin-top: 10px">
+                            <input type="file" hidden accept=".doc,.docx,.pdf" id="fileID" style="display:none;">
+                            <label for="fileID" class="btn">Прикачете вашето CV</label>
+                            <div>
+                                <span id="file-chosen" style="color: #005af0;"></span>
+                            </div>
+                        </div>
+
+                        <div class="sect5">
+                            <div>
+                                <button class="btn_send" type="submit">Изпращане</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="faq_holder">
+        <button class="accordion">Защо трябва да въвеждам телефонния си номер</button>
+        <div class="panel">
+            <p style="color: #005af0d9"> Телефонният Ви номер е необходим за лесна и бърза форма на комуникация с Вас.
+            </p>
+        </div>
+
+        <button class="accordion">Защо трябва да въвеждам линк към Facebook профила ми</button>
+        <div class="panel">
+            <p style="color: #005af0d9"> Както в случая с телефонния Ви номер, линкът към Вашия Фейсбук профил би ни
+                помогнал за бърза връзка с Вас в случай,
+                че не успеем да се свържем с Вас по телефона. Ако нямате Фейсбук профил, оставете полето празно.</p>
+        </div>
+
+        <button class="accordion">Какъв формат трябва да е CV-то</button>
+        <div class="panel">
+            <p style="color: #005af0d9"> Формата приема файлове от тип .doc, .docx, .pdf</p>
+        </div>
+
+        <button class="accordion">Как ще се провежда практиката</button>
+        <div class="panel">
+            <p style="color: #005af0d9"> Практиката може да се провежда както дистанционно, така и присъствено,
+                като това трябва да бъде съгласувано с провеждащото практиката лице.</p>
+        </div>
+
+        <button class="accordion">Кога започва практиката и къде ще се провежда</button>
+        <div class="panel">
+            <p style="color: #005af0d9"> Практиката започва на 11. декември, като ще се провежда в офиса на фирмата,
+                която се намира на
+                ул. Христо Г. Данов №11 срещу Куклен Театър
+                (влиза се през сивата метелна врата, която се намира точно до табелата, указваща името и номера на
+                улицата).
+                Ще бъдете уведомени допълнително за конкретния час на първото занятие.</p>
+        </div>
+    </div>
+
+    <script>
+        //<!-- For FAQ accordions -->
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+
+        //<!-- For Image upload -->
+        const cvFileChosen = document.getElementById('file-chosen');
+        const cvUpload = document.getElementById('fileID');
+
+        const dropAreaPicture = document.querySelector(".uploadPicture");
+        const button_picture = dropAreaPicture.querySelector(".btn_pic");
+        const input_pic = dropAreaPicture.querySelector("#picID");
+
+        cvUpload.addEventListener('change', function () {
+            cvFileChosen.textContent = this.files[0].name;
+        });
+
+        function previewImage(event) {
+            var input = event.target;
+            var image = document.getElementById('preview');
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    image.src = e.target.result;
+                    //document.getElementById('picID').value = e.target.result.split(',')[1];
+                    //document.getElementById('preview').value = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+    </script>
+
+</body>
+
+
+
+</html>
